@@ -1,0 +1,467 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+sensor:
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/0"
+    name: "input 0"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/1"
+    name: "input 1"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/2"
+    name: "input 2"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/3"
+    name: "input 3"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/4"
+    name: "input 4"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/5"
+    name: "input 5"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/6"
+    name: "input 6"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/7"
+    name: "input 7"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/8"
+    name: "input 8"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/9"
+    name: "input 9"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/10"
+    name: "input 10"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/11"
+    name: "input 11"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/12"
+    name: "input 12"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/13"
+    name: "input 13"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/14"
+    name: "input 14"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/15"
+    name: "input 15"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/16"
+    name: "input 16"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/17"
+    name: "input 17"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/18"
+    name: "input 18"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/19"
+    name: "input 19"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/20"
+    name: "input 20"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/21"
+    name: "input 21"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/22"
+    name: "input 22"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/23"
+    name: "input 23"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/24"
+    name: "input 24"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/25"
+    name: "input 25"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/26"
+    name: "input 26"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/27"
+    name: "input 27"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/28"
+    name: "input 28"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/29"
+    name: "input 29"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/30"
+    name: "input 30"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/31"
+    name: "input 31"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/32"
+    name: "input 32"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/33"
+    name: "input 33"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/34"
+    name: "input 34"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/35"
+    name: "input 35"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/36"
+    name: "input 36"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/37"
+    name: "input 37"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/38"
+    name: "input 38"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/39"
+    name: "input 39"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/40"
+    name: "input 40"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/41"
+    name: "input 41"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/42"
+    name: "input 42"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/43"
+    name: "input 43"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/44"
+    name: "input 44"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/45"
+    name: "input 45"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/46"
+    name: "input 46"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/47"
+    name: "input 47"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/48"
+    name: "input 48"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/49"
+    name: "input 49"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/50"
+    name: "input 50"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/51"
+    name: "input 51"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/52"
+    name: "input 52"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/53"
+    name: "input 53"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/54"
+    name: "input 54"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/55"
+    name: "input 55"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/56"
+    name: "input 56"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/57"
+    name: "input 57"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/58"
+    name: "input 58"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/59"
+    name: "input 59"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/60"
+    name: "input 60"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/61"
+    name: "input 61"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/62"
+    name: "input 62"
+  - platform: mqtt
+    state_topic: "lightboard/get/inputs/63"
+    name: "input 63"
+
+
+
+light:
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/0"
+    state_topic: "lightboard/get/outputs/0"
+    name: "output 0"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/1"
+    state_topic: "lightboard/get/outputs/1"
+    name: "output 1"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/2"
+    state_topic: "lightboard/get/outputs/2"
+    name: "output 2"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/3"
+    state_topic: "lightboard/get/outputs/3"
+    name: "output 3"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/4"
+    state_topic: "lightboard/get/outputs/4"
+    name: "output 4"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/5"
+    state_topic: "lightboard/get/outputs/5"
+    name: "output 5"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/6"
+    state_topic: "lightboard/get/outputs/6"
+    name: "output 6"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/7"
+    state_topic: "lightboard/get/outputs/7"
+    name: "output 7"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/8"
+    state_topic: "lightboard/get/outputs/8"
+    name: "output 8"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/9"
+    state_topic: "lightboard/get/outputs/9"
+    name: "output 9"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/10"
+    state_topic: "lightboard/get/outputs/10"
+    name: "output 10"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/11"
+    state_topic: "lightboard/get/outputs/11"
+    name: "output 11"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/12"
+    state_topic: "lightboard/get/outputs/12"
+    name: "output 12"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/13"
+    state_topic: "lightboard/get/outputs/13"
+    name: "output 13"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/14"
+    state_topic: "lightboard/get/outputs/14"
+    name: "output 14"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/15"
+    state_topic: "lightboard/get/outputs/15"
+    name: "output 15"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/16"
+    state_topic: "lightboard/get/outputs/16"
+    name: "output 16"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/17"
+    state_topic: "lightboard/get/outputs/17"
+    name: "output 17"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/18"
+    state_topic: "lightboard/get/outputs/18"
+    name: "output 18"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/19"
+    state_topic: "lightboard/get/outputs/19"
+    name: "output 19"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/20"
+    state_topic: "lightboard/get/outputs/20"
+    name: "output 20"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/21"
+    state_topic: "lightboard/get/outputs/21"
+    name: "output 21"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/22"
+    state_topic: "lightboard/get/outputs/22"
+    name: "output 22"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/23"
+    state_topic: "lightboard/get/outputs/23"
+    name: "output 23"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/24"
+    state_topic: "lightboard/get/outputs/24"
+    name: "output 24"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/25"
+    state_topic: "lightboard/get/outputs/25"
+    name: "output 25"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/26"
+    state_topic: "lightboard/get/outputs/26"
+    name: "output 26"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/27"
+    state_topic: "lightboard/get/outputs/27"
+    name: "output 27"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/28"
+    state_topic: "lightboard/get/outputs/28"
+    name: "output 28"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/29"
+    state_topic: "lightboard/get/outputs/29"
+    name: "output 29"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/30"
+    state_topic: "lightboard/get/outputs/30"
+    name: "output 30"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/31"
+    state_topic: "lightboard/get/outputs/31"
+    name: "output 31"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/32"
+    state_topic: "lightboard/get/outputs/32"
+    name: "output 32"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/33"
+    state_topic: "lightboard/get/outputs/33"
+    name: "output 33"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/34"
+    state_topic: "lightboard/get/outputs/34"
+    name: "output 34"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/35"
+    state_topic: "lightboard/get/outputs/35"
+    name: "output 35"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/36"
+    state_topic: "lightboard/get/outputs/36"
+    name: "output 36"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/37"
+    state_topic: "lightboard/get/outputs/37"
+    name: "output 37"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/38"
+    state_topic: "lightboard/get/outputs/38"
+    name: "output 38"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/39"
+    state_topic: "lightboard/get/outputs/39"
+    name: "output 39"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/40"
+    state_topic: "lightboard/get/outputs/40"
+    name: "output 40"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/41"
+    state_topic: "lightboard/get/outputs/41"
+    name: "output 41"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/42"
+    state_topic: "lightboard/get/outputs/42"
+    name: "output 42"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/43"
+    state_topic: "lightboard/get/outputs/43"
+    name: "output 43"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/44"
+    state_topic: "lightboard/get/outputs/44"
+    name: "output 44"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/45"
+    state_topic: "lightboard/get/outputs/45"
+    name: "output 45"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/46"
+    state_topic: "lightboard/get/outputs/46"
+    name: "output 46"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/47"
+    state_topic: "lightboard/get/outputs/47"
+    name: "output 47"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/48"
+    state_topic: "lightboard/get/outputs/48"
+    name: "output 48"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/49"
+    state_topic: "lightboard/get/outputs/49"
+    name: "output 49"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/50"
+    state_topic: "lightboard/get/outputs/50"
+    name: "output 50"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/51"
+    state_topic: "lightboard/get/outputs/51"
+    name: "output 51"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/52"
+    state_topic: "lightboard/get/outputs/52"
+    name: "output 52"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/53"
+    state_topic: "lightboard/get/outputs/53"
+    name: "output 53"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/54"
+    state_topic: "lightboard/get/outputs/54"
+    name: "output 54"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/55"
+    state_topic: "lightboard/get/outputs/55"
+    name: "output 55"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/56"
+    state_topic: "lightboard/get/outputs/56"
+    name: "output 56"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/57"
+    state_topic: "lightboard/get/outputs/57"
+    name: "output 57"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/58"
+    state_topic: "lightboard/get/outputs/58"
+    name: "output 58"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/59"
+    state_topic: "lightboard/get/outputs/59"
+    name: "output 59"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/60"
+    state_topic: "lightboard/get/outputs/60"
+    name: "output 60"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/61"
+    state_topic: "lightboard/get/outputs/61"
+    name: "output 61"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/62"
+    state_topic: "lightboard/get/outputs/62"
+    name: "output 62"
+  - platform: mqtt
+    command_topic: "lightboard/set/outputs/63"
+    state_topic: "lightboard/get/outputs/63"
+    name: "output 63"
+

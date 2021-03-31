@@ -14,14 +14,16 @@ function timeout(ms:number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function CanMsgToFrame(data: any): CanFrame {
+function CanMsgToFrame(msg: string): CanFrame {
     const result = {} as CanFrame;
 
-    const msg: Array<string> = [];
-    data.forEach((char: any) => {
-        msg.push(String.fromCharCode(char));
+    // const msg: Array<string> = [];
+    // console.log(data);
+    
+    // data.forEach((char: any) => {
+    //     msg.push(String.fromCharCode(char));
             
-    });
+    // });
 
     if (msg.length < 2)
         throw `message too short : ${msg.length}`;
@@ -30,10 +32,10 @@ function CanMsgToFrame(data: any): CanFrame {
         result.type = 'extended';
         result.id = 0;
         for (let i = 1; i < 9; i++) {
-            result.id *= 10;
-            result.id += parseInt(msg[i]);
+            result.id *= 16;
+            result.id += parseInt(msg[i], 16);
         }
-        result.dataLength = parseInt(msg[9]);
+        result.dataLength = parseInt(msg[9], 16);
         result.data = [];
         for (let i = 0; i < result.dataLength; i++) {
             result.data.push(parseInt(msg[10 + 2*i] + msg[10 + 2*i + 1], 16));
@@ -42,10 +44,10 @@ function CanMsgToFrame(data: any): CanFrame {
         result.type = 'standard';
         result.id = 0;
         for (let i = 1; i < 4; i++) {
-            result.id *= 10;
-            result.id += parseInt(msg[i]);
+            result.id *= 16;
+            result.id += parseInt(msg[i], 16);
         }
-        result.dataLength = parseInt(msg[4]);
+        result.dataLength = parseInt(msg[4]), 16;
         result.data = [];
         for (let i = 0; i < result.dataLength; i++) {
             result.data.push(parseInt(msg[5 + 2*i] + msg[5 + 2*i + 1], 16));
@@ -55,6 +57,22 @@ function CanMsgToFrame(data: any): CanFrame {
     }
 
     return result;
+}
+
+function pad(n: string, width:number, z = 0) {
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z.toString()) + n;
+}
+
+function FrameToCanMsg (frame: CanFrame): string {
+    let msg = '';
+    msg += frame.type === 'standard' ? 't' : 'T';
+    msg += pad(frame.id.toString(16), 3);
+    msg += frame.dataLength.toString(16);
+    for (let index = 0; index < frame.dataLength; index++) {
+        msg += pad(frame.data[index].toString(16), 2);
+    }
+    msg += '\r';
+    return msg;
 }
 
 const test: {
@@ -71,6 +89,7 @@ const can: {
     init (dataCallback: DataCallback): void;
     initCanModule (): void;
     write (message: string): Promise<void>;
+    sendFrame (frame: CanFrame): Promise<void>;
 } = {
     isOpen: false,
     port: new SerialPort('COM6', { // /dev/ttyACM0
@@ -79,6 +98,7 @@ const can: {
     }),
     parser: undefined,
     dataCallback: (frame) => null,
+
     init (dataCallback: DataCallback):void {
         this.dataCallback = dataCallback;
         this.port.open((err: Error | null | undefined) => {
@@ -101,13 +121,14 @@ const can: {
                     if(debug_logFrames) { console.log(frame); }
                     this.dataCallback(frame);
                 } catch (error) {
-                    console.error(error);
+                    // console.error(error);
                 }
             });
 
             this.initCanModule();
         });
     },
+
     initCanModule (): void {
         this.port.write('S3\r', (err: Error | null | undefined) => {
             if (err) {
@@ -129,6 +150,21 @@ const can: {
         }
         return new Promise((resolve, reject) => {
             this.port.write(message, async (err: Error | null | undefined) => {
+                if (err) {
+                    return reject(err);
+                }
+                await timeout(100);
+                return resolve();
+            });
+        });
+    },
+
+    async sendFrame (frame: CanFrame): Promise<void> {
+        if (!this.isOpen) {
+            return Promise.reject('port is not opened');
+        }
+        return new Promise((resolve, reject) => {
+            this.port.write(FrameToCanMsg(frame), async (err: Error | null | undefined) => {
                 if (err) {
                     return reject(err);
                 }

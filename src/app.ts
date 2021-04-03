@@ -1,7 +1,7 @@
 import {can, CanFrame} from './can';
 import MQTT from 'mqtt';
 
-const mqtt = MQTT.connect('mqtt://192.168.0.150');
+const mqtt = MQTT.connect('mqtt://localhost');
 
 const COMMAND_SET_CONFIG = 1;
 const COMMAND_SET_OUTPUT = 2;

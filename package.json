@@ -7,7 +7,8 @@
     "lint": "eslint src/**",
     "lint-fix": "eslint --fix src/**",
     "tsc": "tsc src/**/*.ts",
-    "test": "nodemon"
+    "test": "nodemon",
+    "start": "ts-node ./src/app.ts"
   },
   "repository": {
     "type": "git",
@@ -45,4 +46,3 @@
     "ts-node": "^9.1.1"
   }
 }
-

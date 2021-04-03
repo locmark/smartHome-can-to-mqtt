@@ -92,7 +92,7 @@ const can: {
     sendFrame (frame: CanFrame): Promise<void>;
 } = {
     isOpen: false,
-    port: new SerialPort('COM6', { // /dev/ttyACM0
+    port: new SerialPort('/dev/ttyACM0', { // /dev/ttyACM0
         autoOpen: false,
         baudRate: 115200
     }),

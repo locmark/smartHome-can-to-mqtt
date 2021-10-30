@@ -82,6 +82,10 @@ mqtt.on('connect', () => {
         mqtt.subscribe(`lightboard/set/outputs/${index}`, err => {if (err) console.error(err);});
     }
 
+    for (let index = 0; index < 7; index++) {
+        mqtt.subscribe(`lightboard/set/cover/${index}`, err => {if (err) console.error(err);});
+    }
+
     mqtt.on('message', (topic: string, message) => {
         // console.log(`topic: ${topic} : ${message}`);
         const topicPath = topic.split('/');
@@ -92,6 +96,18 @@ mqtt.on('connect', () => {
                     const state = (message.toString() === 'ON') ? 1 : 0;
                     // console.log(`state: ${state}`);
                     sendCommand(COMMAND_SET_OUTPUT, address, state);
+                } else if (topicPath[2] === 'cover') {
+                    const address = parseInt(topicPath[3]);
+                    switch (message.toString()) {
+                        case 'OPEN':
+                            sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 1);
+                            setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 0); }, 1000);
+                            break;
+                        case 'CLOSE':
+                            sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 1);
+                            setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 0); }, 1000);
+                            break;
+                    }
                 }
             }
         }

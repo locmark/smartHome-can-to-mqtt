@@ -8,12 +8,14 @@ const COMMAND_SET_OUTPUT = 2;
 const COMMAND_GET_INPUTS = 3;
 const COMMAND_GET_OUTPUTS = 4;
 
+const heatingUpstairsAddress = 0x500;
 const lightboardCommandAddress = 0x601;
 const inputsAddress = 0x701;
 const outputsAddress = 0x702;
 
 const inputs: Array<boolean> = [];
 const outputs: Array<boolean> = [];
+const heatingUpsatirsInputs: Array<boolean> = [false, false, false, false, false, false, false, false];
 
 async function sendCommand(command: number, address = -1, value = -1) {
     const frame: CanFrame = {
@@ -41,39 +43,58 @@ async function sendCommand(command: number, address = -1, value = -1) {
 }
 
 can.init((frame: CanFrame) => {
+
+    console.log(`id: ${frame.id}; len: ${frame.dataLength}; data: ${frame.data}`);
+
     if(frame.dataLength < 1) {
         return;
     }
 
     switch (frame.id) {
-    case inputsAddress:
-        for (let port = 0; port < 8; port++) {
-            for (let pin = 0; pin < 8; pin++) {
-                inputs[port * 8 + pin] = ( ((frame.data[port] >> pin) & 1) > 0 );
+        case inputsAddress:
+            for (let port = 0; port < 8; port++) {
+                for (let pin = 0; pin < 8; pin++) {
+                    inputs[port * 8 + pin] = ( ((frame.data[port] >> pin) & 1) > 0 );
+                }
             }
-        }
-        // console.log(inputs);
-        break;
-    case outputsAddress:
-        for (let port = 0; port < 8; port++) {
-            for (let pin = 0; pin < 8; pin++) {
-                outputs[port * 8 + pin] = ( ((frame.data[port] >> pin) & 1) > 0 );
+            // console.log(inputs);
+            break;
+        case outputsAddress:
+            for (let port = 0; port < 8; port++) {
+                for (let pin = 0; pin < 8; pin++) {
+                    outputs[port * 8 + pin] = ( ((frame.data[port] >> pin) & 1) > 0 );
+                }
             }
-        }
-        // console.log(outputs);
-        break;
-    default:
-        break;
+            // console.log(outputs);
+            break;
+
+        case heatingUpstairsAddress:
+            for (let pin = 0; pin < 8; pin++) {
+                heatingUpsatirsInputs[pin] = ( ((frame.data[2] >> pin) & 1) > 0 );
+            }
+            // console.log(heatingUpsatirsInputs);
+            break;
+        default:
+            console.log(frame.id);
+            console.log(frame.data);
+            break;
     }
 });
 
 mqtt.on('connect', () => {
+    sendCommand(COMMAND_GET_INPUTS);
+    sendCommand(COMMAND_GET_OUTPUTS);
 
     setInterval(async () => {
         for (let index = 0; index < 64; index++) {
             mqtt.publish(`lightboard/get/inputs/${index}`, inputs[index] ? 'ON' : 'OFF');
             mqtt.publish(`lightboard/get/outputs/${index}`, outputs[index] ? 'ON' : 'OFF');
         }
+
+        for (let index = 0; index < 8; index++) {
+            mqtt.publish(`heatingUpsatirs/get/inputs/${index}`, heatingUpsatirsInputs[index] ? 'ON' : 'OFF');
+        }
+
         await sendCommand(COMMAND_GET_INPUTS);
         await sendCommand(COMMAND_GET_OUTPUTS);
     }, 1000);
@@ -100,10 +121,12 @@ mqtt.on('connect', () => {
                     const address = parseInt(topicPath[3]);
                     switch (message.toString()) {
                         case 'OPEN':
+                            console.log(`opening cover ${address}`);
                             sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 1);
                             setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 0); }, 1000);
                             break;
                         case 'CLOSE':
+                            console.log(`closing cover ${address}`);
                             sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 1);
                             setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 0); }, 1000);
                             break;

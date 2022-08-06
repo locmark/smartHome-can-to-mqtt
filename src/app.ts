@@ -147,4 +147,6 @@ mqtt.on('connect', () => {
     });
 });
 
-mqtt.on('error', console.error);
+mqtt.on('error', (err) => {
+    logger.error(`mqtt errror: ${err.message} at ${err.stack}`)
+});

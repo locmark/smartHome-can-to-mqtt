@@ -1,5 +1,6 @@
 import {can, CanFrame} from './can';
 import MQTT from 'mqtt';
+import { logger } from './logger'
 
 const mqtt = MQTT.connect('mqtt://localhost');
 
@@ -38,13 +39,12 @@ async function sendCommand(command: number, address = -1, value = -1) {
     try {
         await can.sendFrame(frame);
     } catch (error) {
-        console.log(error);
+        logger.error(`cannot send command: ${error}`)
     }
 }
 
 can.init((frame: CanFrame) => {
-
-    console.log(`id: ${frame.id}; len: ${frame.dataLength}; data: ${frame.data}`);
+    logger.info(`new can frame: id: ${frame.id}; len: ${frame.dataLength}; data: ${frame.data}`);
 
     if(frame.dataLength < 1) {
         return;
@@ -82,6 +82,7 @@ can.init((frame: CanFrame) => {
 });
 
 mqtt.on('connect', () => {
+    logger.info('mqtt connected')
     sendCommand(COMMAND_GET_INPUTS);
     sendCommand(COMMAND_GET_OUTPUTS);
 
@@ -107,8 +108,17 @@ mqtt.on('connect', () => {
         mqtt.subscribe(`lightboard/set/cover/${index}`, err => {if (err) console.error(err);});
     }
 
+    let ignoreNewMqttMsgs = true;
+    setTimeout(() => {
+        ignoreNewMqttMsgs = false;
+    }, 500);
+
     mqtt.on('message', (topic: string, message) => {
-        // console.log(`topic: ${topic} : ${message}`);
+        logger.info(`new mqtt msg: topic: ${topic} ; content: ${message}`);
+        if (ignoreNewMqttMsgs) {
+            logger.info('ignoring this mqtt msg');
+            return;
+        }
         const topicPath = topic.split('/');
         if (topicPath[0] === 'lightboard') {
             if (topicPath[1] === 'set') {
@@ -121,12 +131,12 @@ mqtt.on('connect', () => {
                     const address = parseInt(topicPath[3]);
                     switch (message.toString()) {
                         case 'OPEN':
-                            console.log(`opening cover ${address}`);
+                            logger.info(`opening cover ${address}`);
                             sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 1);
                             setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2, 0); }, 1000);
                             break;
                         case 'CLOSE':
-                            console.log(`closing cover ${address}`);
+                            logger.info(`closing cover ${address}`);
                             sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 1);
                             setTimeout(() => { sendCommand(COMMAND_SET_OUTPUT, 18 + address * 2 + 1, 0); }, 1000);
                             break;

@@ -1,5 +1,6 @@
 import SerialPort from 'serialport';
-const debug_logFrames = false;
+import { logger } from './logger';
+const debug_logFrames = true;
 
 type CanFrame = {
     type: string,
@@ -103,8 +104,8 @@ const can: {
         this.dataCallback = dataCallback;
         this.port.open((err: Error | null | undefined) => {
             if (err) {
-                console.log('Error opening port: ', err.message);
-                console.log(`retying in 5 seconds...`);
+                logger.error('Error opening port: ', err.message);
+                logger.info(`retying port opening in 5 seconds...`);
                 setTimeout(() => {
                     this.init(dataCallback);
                 }, 5000);
@@ -112,13 +113,13 @@ const can: {
         });
 
         this.port.on('open', () => {
-            console.log('port opened!');
+            logger.info('port opened!');
 
             this.parser = this.port.pipe(new SerialPort.parsers.Readline({delimiter: '\r'}));
             this.parser.on('data', (data: any) => {
                 try {
                     const frame = CanMsgToFrame(data);
-                    if(debug_logFrames) { console.log(frame); }
+                    if(debug_logFrames) { logger.debug(`new can frame: ${frame}`); }
                     this.dataCallback(frame);
                 } catch (error) {
                     // console.error(error);
@@ -130,15 +131,19 @@ const can: {
     },
 
     initCanModule (): void {
+        logger.info('initializing can module');
         this.port.write('S3\r', (err: Error | null | undefined) => {
             if (err) {
-                return console.log('Error on write: ', err.message);
+                return logger.error(`cannot set canbus speed; Error on write: ${err.message}`);
             }
+
+            logger.info('can module speed set to S3');
     
             this.port.write('O\r', (err: Error | null | undefined) => {
                 if (err) {
-                    return console.log('Error on write: ', err.message);
+                    return logger.error(`cannot open canbus; Error on write: ${err.message}`);
                 }
+                logger.info('canbus opened successfully');
                 this.isOpen = true;
             });
         });

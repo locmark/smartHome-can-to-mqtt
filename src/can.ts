@@ -1,6 +1,7 @@
 import SerialPort from 'serialport';
 import { logger } from './logger';
-const debug_logFrames = true;
+import { queue, QueueObject, ErrorCallback } from 'async';
+const debug_logFrames = false;
 
 type CanFrame = {
     type: string,
@@ -82,6 +83,8 @@ const test: {
     isOpen: false
 };
 
+
+
 const can: {
     isOpen: boolean;
     port: SerialPort;
@@ -91,6 +94,7 @@ const can: {
     initCanModule (): void;
     write (message: string): Promise<void>;
     sendFrame (frame: CanFrame): Promise<void>;
+    queueTaskBody: (frame: CanFrame, completed: ErrorCallback<Error>) => void;
 } = {
     isOpen: false,
     port: new SerialPort('/dev/ttyACM0', { // /dev/ttyACM0
@@ -99,6 +103,21 @@ const can: {
     }),
     parser: undefined,
     dataCallback: (frame) => null,
+
+    queueTaskBody (frame: CanFrame, completed: ErrorCallback<Error>) {
+        if (!this.isOpen) {
+            completed(new Error('port is not opened'));
+            return;
+        }
+
+        this.port.write(FrameToCanMsg(frame), async (err: Error | null | undefined) => {
+            if (err) {
+                completed(err);
+            }
+            await timeout(100);
+            completed();
+        });
+    },
 
     init (dataCallback: DataCallback):void {
         this.dataCallback = dataCallback;
@@ -119,7 +138,7 @@ const can: {
             this.parser.on('data', (data: any) => {
                 try {
                     const frame = CanMsgToFrame(data);
-                    if(debug_logFrames) { logger.debug(`new can frame: ${frame}`); }
+                    if(debug_logFrames) { logger.debug(`new can frame: ${JSON.stringify(frame)}`); }
                     this.dataCallback(frame);
                 } catch (error) {
                     // console.error(error);
@@ -165,20 +184,18 @@ const can: {
     },
 
     async sendFrame (frame: CanFrame): Promise<void> {
-        if (!this.isOpen) {
-            return Promise.reject('port is not opened');
-        }
-        return new Promise((resolve, reject) => {
-            this.port.write(FrameToCanMsg(frame), async (err: Error | null | undefined) => {
-                if (err) {
-                    return reject(err);
-                }
-                await timeout(100);
-                return resolve();
-            });
-        });
+        taskQueue.push(frame, (err) => {
+            if (err instanceof Error) {
+                logger.error(`cannot send command: ${err.message}`)
+            } else if (err) {
+                logger.error(`cannot send command: ${err}`)
+            }
+        })
     }
+    
 };
+
+const taskQueue = queue(can.queueTaskBody.bind(can), 1);
 
 export {
     can,

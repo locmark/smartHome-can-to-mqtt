@@ -2,7 +2,10 @@ import {can, CanFrame} from './can';
 import MQTT from 'mqtt';
 import { logger } from './logger'
 
-const mqtt = MQTT.connect('mqtt://localhost');
+const mqtt = MQTT.connect('mqtt://192.168.0.109', {
+    username: 'can2mqtt',
+    password: 'can2mqtt'
+});
 
 const COMMAND_SET_CONFIG = 1;
 const COMMAND_SET_OUTPUT = 2;
@@ -44,7 +47,7 @@ async function sendCommand(command: number, address = -1, value = -1) {
 }
 
 can.init((frame: CanFrame) => {
-    logger.info(`new can frame: id: ${frame.id}; len: ${frame.dataLength}; data: ${frame.data}`);
+    // logger.info(`new can frame: id: ${frame.id}; len: ${frame.dataLength}; data: ${frame.data}`);
 
     if(frame.dataLength < 1) {
         return;
